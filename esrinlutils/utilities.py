@@ -60,13 +60,11 @@ def configureLogging(logFilePath, logToArcGIS=False, level="DEBUG"):
     _logger.setLevel(level)
 
     logInfo("Logging Created, logfile: {}".format(logFilePath))
-    logDebug("utilities::configureLogging::End")
 
 def resetLogging():
     """
     Reset all current active Logger objects
     """
-    logDebug("utilities::resetLogging::Start")
 
     ## Set global variable, to be used in all functions
     global _logger
@@ -79,19 +77,15 @@ def resetLogging():
             handler.close()
         _logger = None
 
-    logDebug("utilities::resetLogging::End")
-
 def getLogger():
     """
     Get the current active Logger object, if not present, configure a new one
     """
-    logDebug("utilities::getLogger::Start")
 
     ## If no Logger object is present, configure a new one
     if not _logger:
         configureLogging(None)
     
-    logDebug("utilities::getLogger::End")
     return _logger
 
 def logException(exception, message = ""):
@@ -102,14 +96,11 @@ def logException(exception, message = ""):
         exception               (Exception) - the Exception that occured
         message                 (str)       - the message to display
     """
-    logDebug("utilities::logException::Start")
 
     ## Log an exception message
     getLogger().exception(message)
     logToArcGIS(message,"FATAL")
     logToArcGIS(exception,"FATAL")
-
-    logDebug("utilities::logException::End")
 
 def logError(message):
     """
@@ -118,14 +109,11 @@ def logError(message):
     Input:
         message                 (str)       - the message to display
     """
-    logDebug("utilities::logError::Start")
 
     ## If the Logger is enabled for Error messages, log the message
     if getLogger().isEnabledFor(logging.ERROR):
         getLogger().error(message)
         logToArcGIS(message,"ERROR")
-
-    logDebug("utilities::logError::End")
     
 def logWarning(message):
     """
@@ -134,14 +122,11 @@ def logWarning(message):
     Input:
         message                 (str)       - the message to display
     """
-    logDebug("utilities::logWarning::Start")
 
     ## If the Logger is enabled for Warning messages, log the message
     if getLogger().isEnabledFor(logging.WARN):
         getLogger().warning(message)
         logToArcGIS(message,"WARN")
-
-    logDebug("utilities::logWarning::End")
 
 def logInfo(message):
     """
@@ -150,14 +135,11 @@ def logInfo(message):
     Input:
         message                 (str)       - the message to display
     """
-    logDebug("utilities::logInfo::Start")
 
     ## If the Logger is enabled for Info messages, log the message
     if getLogger().isEnabledFor(logging.INFO):
         getLogger().info(message)
         logToArcGIS(message,"INFO")
-    
-    logDebug("utilities::logInfo::End")
 
 def logDebug(message):
     """
@@ -166,14 +148,11 @@ def logDebug(message):
     Input:
         message                 (str)       - the message to display
     """
-    logDebug("utilities::logDebug::Start")
 
     ## If the Logger is enabled for Debug messages, log the message
     if getLogger().isEnabledFor(logging.DEBUG):
         getLogger().debug(message)
         logToArcGIS(message,"DEBUG")
-    
-    logDebug("utilities::logDebug::End")
 
 def logToArcGIS(message, level):
     """
@@ -186,7 +165,6 @@ def logToArcGIS(message, level):
 
     ## Check if logging to ArcGIS is enabled
     if _logToArcGIS:
-        logDebug("utilities::logToArcGIS::Start")
 
         ## Check if the arcpy module has already been imported
         if not checkModuleImport("arcpy"):
@@ -203,8 +181,6 @@ def logToArcGIS(message, level):
         else:
             arcpy.AddMessage(fullMessage)
     
-        logDebug("utilities::logToArcGIS::End")
-
 def checkModuleImport(moduleName):
     """
     Check if the module is already imported
