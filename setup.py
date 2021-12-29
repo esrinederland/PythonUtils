@@ -1,8 +1,8 @@
 from distutils.core import setup
 
 setup(
-    name = 'esrinl-utils',
-    packages = ['esrinl-utils'],
+    name = 'esrinlutils',
+    packages = ['esrinlutils'],
     version = '0.1',
     description = 'A set of common functions to be used in scripts',
     author = 'EsriNL DevTeam',
