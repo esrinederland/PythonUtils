@@ -193,6 +193,7 @@ def checkModuleImport(moduleName):
 
     ### Input:
         - `moduleName`              (str)   | the name of the module to check
+        
     ### Output: 
         - `moduleImported`          (bool)  | True if module is imported, False if not
     """

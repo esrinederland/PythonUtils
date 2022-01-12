@@ -17,7 +17,14 @@ A set of common functions to be used in Python scripts by Esri Nederland.
     * `dateStringToTimestamp` | Convert a date string of the given format to a timestamp
     * `timestampToDateString` | Convert a timestamp to a date string in the given format
 
-##### Current Version: esrinlutils 0.4 | 2022-01-12
+##### Current Version: esrinlutils 0.5 | 2022-01-12
 
 """
 from .utilities import *
+
+__all__ = [
+    "configureLogging", "resetLogging", "getLogger", "logToArcGIS",
+    "logException", "logError", "logWarning", "logInfo", "logDebug",
+    "sendRequest", "sendGISRequest", "getGIS", 
+    "dateStringToTimestamp", "timestampToDateString"
+]
