@@ -11,21 +11,27 @@
 import logging
 import datetime
 import requests
-import arcgis
 import sys
+
+__all__ = [
+    "configureLogging", "resetLogging", "getLogger", "logToArcGIS",
+    "logException", "logError", "logWarning", "logInfo", "logDebug",
+    "sendRequest", "sendGISRequest", "getGIS", 
+    "dateStringToTimestamp", "timestampToDateString"
+]
 
 ## Global variables, to be used in all functions
 _logger = None
 _logToArcGIS = False
 
-def configureLogging(logFilePath, logToArcGIS=False, level="DEBUG"):
+def configureLogging(logFilePath, level="INFO", logToArcGIS=False):
     """
     Configure the Logger object
 
-    Input:
-        logFilePath             (str)   - the full path to the logfile to be created, if None, no log file is created
-        log2ArcGIS              (str)   - set to True to write log messages to the ArcGIS output
-        level                   (str)   - minimum log level for messages to be visible (WARNING > INFO > DEBUG)
+    ### Input:
+        * `logFilePath`             (str)   | the full path to the logfile to be created, if None, no log file is created
+        * `log2ArcGIS`              (str)   | set to True to write log messages to the ArcGIS output
+        * `level`                   (str)   | minimum log level for messages to be visible (WARNING > INFO > DEBUG)
     """
 
     ## Set global variables, to be used in all functions
@@ -92,9 +98,9 @@ def logException(exception, message = ""):
     """
     Log an Exception message
 
-    Input:
-        exception               (Exception) - the Exception that occured
-        message                 (str)       - the message to display
+    ### Input:
+        - `exception`               (Exception) | the Exception that occured
+        - `message`                 (str)       | the message to display
     """
 
     ## Log an exception message
@@ -106,8 +112,8 @@ def logError(message):
     """
     Log an Error message
 
-    Input:
-        message                 (str)       - the message to display
+    ### Input:
+        - `message`                 (str)       | the message to display
     """
 
     ## If the Logger is enabled for Error messages, log the message
@@ -119,8 +125,8 @@ def logWarning(message):
     """
     Log a Warning message
 
-    Input:
-        message                 (str)       - the message to display
+    ### Input:
+        - `message`                 (str)       | the message to display
     """
 
     ## If the Logger is enabled for Warning messages, log the message
@@ -132,8 +138,8 @@ def logInfo(message):
     """
     Log an Info message
 
-    Input:
-        message                 (str)       - the message to display
+    ### Input:
+        - `message`                 (str)       | the message to display
     """
 
     ## If the Logger is enabled for Info messages, log the message
@@ -145,8 +151,8 @@ def logDebug(message):
     """
     Log a Debug message
 
-    Input:
-        message                 (str)       - the message to display
+    ### Input:
+        - `message`                 (str)       | the message to display
     """
 
     ## If the Logger is enabled for Debug messages, log the message
@@ -158,9 +164,9 @@ def logToArcGIS(message, level):
     """
     Log the message to the ArcGIS output window, if logging to ArcGIS is enabled
 
-    Input:
-        message                 (str)       - the message to display
-        level                   (str)       - the level of the log message
+    ### Input:
+        - `message`                 (str)       | the message to display
+        - `level`                   (str)       | the level of the log message
     """
 
     ## Check if logging to ArcGIS is enabled
@@ -185,12 +191,11 @@ def checkModuleImport(moduleName):
     """
     Check if the module is already imported
 
-    Input:
-        moduleName              (str)   - the name of the module to check
-    Output: 
-        moduleImported          (bool)  - True if module is imported, False if not
+    ### Input:
+        - `moduleName`              (str)   | the name of the module to check
+    ### Output: 
+        - `moduleImported`          (bool)  | True if module is imported, False if not
     """
-    logDebug("utilities::checkModuleImport::Start::{}".format(moduleName))
 
     ## Boolean to indicate if module is imported or not
     moduleImported = False
@@ -198,23 +203,22 @@ def checkModuleImport(moduleName):
     ## Check if the module is in the system modules and in the current Python directory
     if (moduleName in sys.modules) and (moduleName in dir()):
         moduleImported = True
-    
-    logDebug("utilities::checkModuleImport::End::{}".format(moduleName))
+
     return moduleImported
 
 def sendRequest(url, type="POST", params=None, headers=None):
     """
     Send a request to a URL
 
-    Input:
-        url                     (str)   - the url to send the request to
-        type                    (str)   - the type of request (GET or POST)
-        params                  (dict)  - parameters to be sent with the request
-        headers                 (dict)  - headers to be sent with the request
-    Output:
-        response                (dict)  - the JSON response of the request
+    ### Input:
+        - `url`                     (str)   | the url to send the request to
+        - `type`                    (str)   | the type of request (GET or POST)
+        - `params`                  (dict)  | parameters to be sent with the request
+        - `headers`                 (dict)  | headers to be sent with the request
+    
+    ### Output:
+        - `response`                (dict)  | the JSON response of the request
     """
-    logDebug("utilities::sendRequest::Start")
 
     ## Perform a GET request
     if type == "GET":
@@ -230,23 +234,22 @@ def sendRequest(url, type="POST", params=None, headers=None):
     else:
         response = rawResponse.text
 
-    logDebug("utilities::sendRequest::End")
     return response
 
 def sendGISRequest(gis, url, type="POST", params=None, headers=None):
     """
     Send a request to a URL, using the GIS object for authentication
 
-    Input:
-        gis                     (GIS)   - the Python API GIS object
-        url                     (str)   - the url to send the request to
-        type                    (str)   - the type of request (GET or POST)
-        params                  (dict)  - parameters to be sent with the request
-        headers                 (dict)  - headers to be sent with the request
-    Output:
-        response                (dict)  - the JSON response of the request
+    ### Input:
+        - `gis`                     (GIS)   | the Python API GIS object
+        - `url`                     (str)   | the url to send the request to
+        - `type`                    (str)   | the type of request (GET or POST)
+        - `params`                  (dict)  | parameters to be sent with the request
+        - `headers`                 (dict)  | headers to be sent with the request
+    
+    ### Output:
+        - `response`                (dict)  | the JSON response of the request
     """
-    logDebug("utilities::sendGISRequest::Start")
 
     ## Perform a GET request
     if type == "GET":
@@ -259,25 +262,31 @@ def sendGISRequest(gis, url, type="POST", params=None, headers=None):
     if "error" in response:
         logError("Error in response: {}".format(response["error"]))
 
-    logDebug("utilities::sendGISRequest::End")
     return response
 
 def getGIS(portalUsername=None, portalUrl=None):
     """
     Get a GIS object, either using a profile or the current active user in ArcGIS Pro
 
-    Input:
-        portalUsername          (str)   - username from the user to sign in with, if None, the the current active user in ArcGIS Pro will be used
-        portalUrl               (str)   - URL to the ArcGIS Portal, if not ArcGIS Online
-    Output:
-        gis                     (GIS)   - the GIS object
+    ### Input:
+        - `portalUsername`          (str)   | username from the user to sign in with, if None, the the current active user in ArcGIS Pro will be used
+        - `portalUrl`               (str)   | URL to the ArcGIS Portal, if not ArcGIS Online
+    
+    ### Output:
+        - `gis`                     (GIS)   | the GIS object
     """
-    logDebug("utilities::getGIS::Start")
+
+    ## Check if the arcgis module has already been imported
+    if not checkModuleImport("arcgis"):
+        import arcgis
 
     try:
         ## Sign in using a profile
         if portalUsername:
-            logInfo("Signing in using profile, for user {}".format(portalUsername))
+            if _logger:
+                logInfo("Signing in using profile, for user {}".format(portalUsername))
+            else:
+                print("Signing in using profile, for user {}".format(portalUsername))
 
             ## Create a profile name
             profileName = "arcgis_{}".format(portalUsername)
@@ -291,41 +300,52 @@ def getGIS(portalUsername=None, portalUrl=None):
 
                 ## Create a new profile
                 profileManager.create(profileName, portalUrl, portalUsername, portalPassword)
-                logInfo("Created new profile for user: {}".format(portalUsername))
+                if _logger:
+                    logInfo("Created new profile for user: {}".format(portalUsername))
+                else:
+                    print("Created new profile for user: {}".format(portalUsername))
             
             ## Create a GIS object, using the profile name
             gis = arcgis.GIS(portalUrl, profile=profileName)
         
         ## Sign in using the current active user in ArcGIS Pro
         else:
-            logInfo("Signing in using ArcGIS Pro")
+            if _logger:
+                logInfo("Signing in using ArcGIS Pro")
+            else:
+                print("Signing in using ArcGIS Pro")
 
             ## Create a GIS object using ArcGIS Pro
             gis = arcgis.GIS("Pro")
-
-        logInfo("Successfully signed in to '{}' with the '{}' user".format(gis.properties.portalHostname,gis.properties.user.username))
+        
+        if _logger:
+            logInfo("Successfully signed in to '{}' with the '{}' user".format(gis.properties.portalHostname,gis.properties.user.username))
+        else:
+            print("Successfully signed in to '{}' with the '{}' user".format(gis.properties.portalHostname,gis.properties.user.username))
 
     except Exception as ex:
-        logException(ex, "The GIS object could not be created. You either need to be signed in with ArcGIS Pro or provide a portal username")
+        if _logger:
+            logException(ex, "The GIS object could not be created. You either need to be signed in with ArcGIS Pro or provide a portal username")
+        else:
+            print(ex, "The GIS object could not be created. You either need to be signed in with ArcGIS Pro or provide a portal username")
 
         ## Return None if the GIS object could not be created
         gis = None
 
-    logDebug("utilities::getGIS::End")
     return gis
 
 def dateStringToTimestamp(dateString, formatting="%Y/%m/%d", returnInMilliseconds=True):
     """
     Convert a date string of the given format to a timestamp
 
-    Input:
-        dateString              (str)   - the date to be converted
-        formatting              (str)   - formatting of the dateString, see: https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes
-        returnInMilliseconds    (bool)  - set whether timestamp should be in milliseconds
-    Output:
-        timestamp               (int)   - the created timestamp
+    ### Input:
+        - `dateString`              (str)   | the date to be converted
+        - `formatting`              (str)   | formatting of the dateString, see: https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes
+        - `returnInMilliseconds`    (bool)  | set whether timestamp should be in milliseconds
+    
+    ### Output:
+        - `timestamp`               (int)   | the created timestamp
     """
-    logDebug("utilities::dateStringToTimestamp::Start")
 
     ## Convert the dateString to a datetime object
     element = datetime.datetime.strptime(dateString, formatting)
@@ -336,21 +356,20 @@ def dateStringToTimestamp(dateString, formatting="%Y/%m/%d", returnInMillisecond
     ## If the timestamp should be in milliseconds, multiply by 1000
     if returnInMilliseconds:
         timestamp *= 1000
-    
-    logDebug("utilities::dateStringToTimestamp::End")
+
     return round(timestamp)
 
 def timestampToDateString(timestamp, formatting="%Y/%m/%d"):
     """
     Convert a timestamp to a date string in the given format
 
-    Input:
-        timestamp               (int)   - the timestamp to be converted
-        formatting              (str)   - formatting of the dateString result, see: https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes
-    Output:
-        datestring              (str)   - the created date string
+    ### Input:
+        - `timestamp`               (int)   | the timestamp to be converted
+        - `formatting`              (str)   | formatting of the dateString result, see: https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes
+
+    ### Output:
+        - `datestring`              (str)   | the created date string
     """
-    logDebug("utilities::timestampToDateString::Start")
 
     ## If the given timestamp is in milliseconds, divide by 1000
     if len(f"{timestamp}") > 10:
@@ -362,5 +381,4 @@ def timestampToDateString(timestamp, formatting="%Y/%m/%d"):
     ## Convert the datetime object to a date string in the given format
     dateString = datetime.datetime.strftime(element, formatting)
 
-    logDebug("utilities::timestampToDateString::End")
     return dateString
