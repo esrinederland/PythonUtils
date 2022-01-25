@@ -373,7 +373,7 @@ def timestampToDateString(timestamp, formatting="%Y/%m/%d"):
     """
 
     ## If the given timestamp is in milliseconds, divide by 1000
-    if len(f"{timestamp}") > 10:
+    if len("{}".format(timestamp)) > 10:
         timestamp /= 1000
     
     ## Convert the timestamp to a datetime object

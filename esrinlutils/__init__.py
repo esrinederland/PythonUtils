@@ -17,7 +17,7 @@ A set of common functions to be used in Python scripts by Esri Nederland.
     * `dateStringToTimestamp` | Convert a date string of the given format to a timestamp
     * `timestampToDateString` | Convert a timestamp to a date string in the given format
 
-##### Current Version: esrinlutils 0.5 | 2022-01-12
+##### Current Version: esrinlutils 0.6 | 2022-01-25
 
 """
 from .utilities import *
